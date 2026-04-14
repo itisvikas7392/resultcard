@@ -1,0 +1,29 @@
+{
+  "Class 6": [
+    {"subject": "Hindi", "mm": 100},
+    {"subject": "English", "mm": 100},
+    {"subject": "Mathematics", "mm": 100},
+    {"subject": "Science", "mm": 100},
+    {"subject": "Social Science", "mm": 100},
+    {"subject": "Sanskrit", "mm": 75},
+    {"subject": "Computer", "mm": 50}
+  ],
+  "Class 7": [
+    {"subject": "Hindi", "mm": 100},
+    {"subject": "English", "mm": 100},
+    {"subject": "Mathematics", "mm": 100},
+    {"subject": "Science", "mm": 100},
+    {"subject": "Social Science", "mm": 100},
+    {"subject": "Sanskrit", "mm": 75},
+    {"subject": "Drawing", "mm": 50}
+  ],
+  "Class 10": [
+    {"subject": "Hindi", "mm": 100},
+    {"subject": "English", "mm": 100},
+    {"subject": "Mathematics", "mm": 100},
+    {"subject": "Science", "mm": 100},
+    {"subject": "Social Science", "mm": 100},
+    {"subject": "Sanskrit", "mm": 75},
+    {"subject": "Computer Science", "mm": 50}
+  ]
+}

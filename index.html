@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result Card - MALTI DEVI ADARSH INTER COLLEGE</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+    <div class="controls no-print">
+        <select id="theme-select" onchange="changeTheme()" class="print-btn"
+            style="background: white; color: var(--text-main); border: 1px solid var(--border-color); margin-right: 10px;">
+            <option value="theme-blue">Classic Blue</option>
+            <option value="theme-gold">Elegant Gold</option>
+            <option value="theme-modern">Modern Minimalist</option>
+        </select>
+        <button onclick="openSchoolSettings()" class="print-btn" style="margin-right: 10px; background: #475569;">
+            ⚙️ School Settings
+        </button>
+        <button onclick="window.print()" class="print-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+            Print Result Card
+        </button>
+    </div>
+    <div class="a4-page">
+        <div class="watermark">MALTI DEVI ADARSH INTER COLLEGE</div>
+        <header>
+            <input type="file" id="logo-input" accept="image/*" style="display:none">
+            <div class="school-logo-placeholder" id="logo-display"
+                onclick="document.getElementById('logo-input').click()">
+                <span>CLICK TO UPLOAD LOGO</span>
+            </div>
+            <div class="school-info">
+                <h1 id="school-name">MALTI DEVI ADARSH INTER COLLEGE</h1>
+                <p class="address" id="school-address">ALAMPUR BHAISIYAPUR MALIKPUR KANNAUJ</p>
+                <div class="report-title" id="school-session">ANNUAL PROGRESS REPORT - 2025-26</div>
+            </div>
+        </header>
+
+        <section class="student-details">
+            <input type="file" id="photo-input" accept="image/*" style="display:none">
+            <div class="photo-placeholder" id="photo-display" onclick="document.getElementById('photo-input').click()">
+                <span>CLICK TO UPLOAD PHOTO</span>
+            </div>
+            <div class="details-grid">
+                <div class="detail-item full-width"><strong>Student's Name:</strong> <input type="text"
+                        class="detail-input"></div>
+                <div class="detail-item full-width"><strong>Father's Name:</strong> <input type="text"
+                        class="detail-input"></div>
+                <div class="detail-item class-selector-row no-print">
+                    <strong>Class:</strong>
+                    <select id="class-select" class="detail-input class-select" onchange="loadClassSubjects()">
+                        <option value="">Select Class...</option>
+                    </select>
+                    <button onclick="addNewClass()" class="class-btn" title="Add New Class">+</button>
+                    <button onclick="clearClasses()" class="class-btn" title="Clear All Classes">🗑️</button>
+                    <button onclick="openSubjectsModal()" class="class-btn" style="width: auto; padding: 0 10px;"
+                        title="Set Subjects & Max Marks">⚙️ Set Subjects & M.M.</button>
+                </div>
+                <div class="detail-item"><strong>Class:</strong> <input type="text" class="detail-input"
+                        id="print-class" readonly></div>
+                <div class="detail-item"><strong>Section:</strong> <input type="text" class="detail-input"></div>
+                <div class="detail-item"><strong>SR.No:</strong> <input type="text" class="detail-input"></div>
+                <div class="detail-item"><strong>Date of Birth:</strong> <input type="text" class="detail-input"></div>
+            </div>
+        </section>
+
+        <section class="performance-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="color: white;">SUBJECT</th>
+                        <th colspan="5">HALF YEARLY EXAM</th>
+                        <th colspan="5">YEARLY EXAM</th>
+                        <th colspan="2">GRAND TOTAL</th>
+                    </tr>
+                    <tr class="sub-headers">
+                        <th style="text-align: center;">M.M.</th>
+                        <th>Ist P.</th>
+                        <th>IInd P.</th>
+                        <th>Pra.</th>
+                        <th>Total</th>
+                        <th style="text-align: center;">M.M.</th>
+                        <th>Ist P.</th>
+                        <th>IInd P.</th>
+                        <th>Pra.</th>
+                        <th>Total</th>
+                        <th style="text-align: center;">M.M.</th>
+                        <th>Obt.</th>
+                    </tr>
+                </thead>
+                <tbody id="subjects-body">
+                    <!-- 11 Subjects -->
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input" value="Hindi"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input" value="English"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input" value="Mathematics"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input" value="Science"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input" value="Social Science"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input" value="Sanskrit"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input" value="Computer/Art"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+                    <tr class="subject-row">
+                        <td><input type="text" placeholder="Subject" class="subject-input"></td>
+                        <td><input type="number" class="hy-mm"></td>
+                        <td><input type="number" class="hy-ist"></td>
+                        <td><input type="number" class="hy-iind"></td>
+                        <td><input type="number" class="hy-iiird"></td>
+                        <td class="hy-total"></td>
+                        <td><input type="number" class="y-mm"></td>
+                        <td><input type="number" class="y-ist"></td>
+                        <td><input type="number" class="y-iind"></td>
+                        <td><input type="number" class="y-iiird"></td>
+                        <td class="y-total"></td>
+                        <td class="gt-mm"></td>
+                        <td class="gt-obt"></td>
+                    </tr>
+
+                    <tr class="total-row">
+                        <td><strong>TOTAL</strong></td>
+                        <td id="total-hy-mm"></td>
+                        <td id="total-hy-ist"></td>
+                        <td id="total-hy-iind"></td>
+                        <td id="total-hy-iiird"></td>
+                        <td id="total-hy-total"></td>
+                        <td id="total-y-mm"></td>
+                        <td id="total-y-ist"></td>
+                        <td id="total-y-iind"></td>
+                        <td id="total-y-iiird"></td>
+                        <td id="total-y-total"></td>
+                        <td id="total-gt-mm"></td>
+                        <td id="total-gt-obt"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="summary">
+            <div style="flex-grow: 1;">
+                <div class="summary-item"><strong>PERCENTAGE:</strong> <span id="overall-percentage">_______ %</span>
+                </div>
+                <div class="summary-item"><strong>RESULT:</strong> <span id="overall-result">___________</span></div>
+                <div class="summary-item"><strong>OVERALL GRADE:</strong> <span id="overall-grade">_______</span></div>
+                <div class="summary-item"><strong>ATTENDANCE:</strong> <input type="text" class="summary-input"
+                        placeholder="____ / ____"></div>
+            </div>
+            <div class="qrcode-container">
+                <div id="qrcode"></div>
+                <div class="qrcode-label">Scan to Verify</div>
+            </div>
+        </section>
+
+
+        <footer>
+            <div class="signature">
+                <p>Date</p>
+                <input type="text" class="signature-input">
+
+            </div>
+            <div class="signature">
+                <p>Class Teacher</p>
+                <input type="text" class="signature-input">
+
+            </div>
+            <div class="signature">
+                <p>Principal</p>
+                <input type="text" class="signature-input">
+
+            </div>
+        </footer>
+        <!-- School Settings Modal -->
+        <div id="schoolSettingsModal" class="modal no-print"
+            style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+            <div
+                style="background:white; padding:20px; border-radius:8px; width:450px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h2 style="margin-top:0; color:var(--primary-navy); font-family:var(--heading-font); font-size: 20px;">
+                    School Settings</h2>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-weight:bold; margin-bottom:5px; color: #475569;">School
+                        Name:</label>
+                    <input type="text" id="input-school-name"
+                        style="width:100%; padding:8px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px; font-family: inherit;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-weight:bold; margin-bottom:5px; color: #475569;">School
+                        Address:</label>
+                    <input type="text" id="input-school-address"
+                        style="width:100%; padding:8px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px; font-family: inherit;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-weight:bold; margin-bottom:5px; color: #475569;">Session/Report
+                        Title:</label>
+                    <input type="text" id="input-school-session"
+                        style="width:100%; padding:8px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px; font-family: inherit;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label style="display:block; font-weight:bold; margin-bottom:5px; color: #475569;">Settings
+                        Password:</label>
+                    <input type="password" id="input-settings-password"
+                        style="width:100%; padding:8px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px; font-family: inherit;">
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:20px;">
+                    <button onclick="closeSchoolSettings()"
+                        style="padding:8px 16px; background:#e2e8f0; color:#475569; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Cancel</button>
+                    <button onclick="saveSchoolSettings()"
+                        style="padding:8px 16px; background:var(--primary-navy); color:black; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Save
+                        Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subjects & Max Marks Modal -->
+        <div id="subjectsModal" class="modal no-print"
+            style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+            <div
+                style="background:white; padding:20px; border-radius:8px; width:450px; max-height:90vh; overflow-y:auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h2 style="margin-top:0; color:var(--primary-navy); font-family:var(--heading-font); font-size: 20px;">
+                    Set Subjects & Max Marks</h2>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight:bold; color:var(--text-slate);">Select Class to Modify:</label>
+                    <select id="modal-class-select"
+                        style="width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:4px; font-weight:bold;"
+                        onchange="loadModalSubjects()">
+                        <option value="">-- Select Class --</option>
+                    </select>
+                </div>
+
+                <div
+                    style="display:flex; justify-content:space-between; margin-bottom: 5px; font-size:12px; font-weight:bold; color:#64748b;">
+                    <span style="flex:2">Subject Name</span>
+                    <span style="flex:1; text-align:center;">Max Marks</span>
+                </div>
+                <div id="modal-subjects-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:15px;">
+                    <!-- JS will inject 11 rows: Subject Name | Max Marks -->
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:20px;">
+                    <button onclick="closeSubjectsModal()"
+                        style="padding:8px 16px; background:#e2e8f0; color:#475569; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Cancel</button>
+                    <button onclick="saveSubjectsFromModal()"
+                        style="padding:8px 16px; background:var(--primary-navy); color:black; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">Save
+                        Changes</button>
+                </div>
+            </div>
+        </div>
+        <div class="developer-credit"> Developed By- Vikas 7392045049</div>
+    </div>
+
+    <script>
+        let classesData = JSON.parse(localStorage.getItem('resultcard-classes')) || {};
+
+        function populateClassSelect() {
+            const select = document.getElementById('class-select');
+            select.innerHTML = '<option value="">Select Class...</option>';
+            Object.keys(classesData).forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls;
+                option.textContent = cls;
+                select.appendChild(option);
+            });
+        }
+        populateClassSelect();
+
+        function loadClassSubjects() {
+            const selectedClass = document.getElementById('class-select').value;
+            document.getElementById('print-class').value = selectedClass;
+            if (!selectedClass || !classesData[selectedClass]) return;
+
+            const allRows = Array.from(document.querySelectorAll('.subject-row:not(.total-row)'));
+            const subjects = classesData[selectedClass];
+
+            allRows.forEach((row, index) => {
+                const sub = subjects[index] || { subject: '', mm: '' };
+                const subjectInput = row.querySelector('.subject-input');
+                if (subjectInput) {
+                    subjectInput.value = sub.subject;
+                }
+                const hyMmInput = row.querySelector('.hy-mm');
+                const yMmInput = row.querySelector('.y-mm');
+                const mmVal = (sub.mm !== undefined && sub.mm !== '') ? sub.mm : '';
+                if (hyMmInput) hyMmInput.value = mmVal;
+                if (yMmInput) yMmInput.value = mmVal;
+            });
+            calculate();
+        }
+
+        function addNewClass() {
+            const className = prompt('Enter new class name:');
+            if (!className || classesData[className]) return alert('Class exists or invalid name');
+
+            const allRows = Array.from(document.querySelectorAll('.subject-row:not(.total-row)'));
+            const subjects = [];
+            allRows.forEach(row => {
+                const subjectInput = row.querySelector('.subject-input');
+                const subject = subjectInput ? subjectInput.value.trim() : '';
+                const mmValue = row.querySelector('.hy-mm').value;
+                let mm = '';
+                if (subject !== '') {
+                    mm = mmValue !== '' ? parseFloat(mmValue) : 100;
+                }
+                subjects.push({ subject, mm });
+            });
+            classesData[className] = subjects;
+            localStorage.setItem('resultcard-classes', JSON.stringify(classesData));
+            populateClassSelect();
+            alert(`Added ${className} (${subjects.length} subjects)`);
+        }
+
+        function clearClasses() {
+            if (confirm('Clear all classes?')) {
+                classesData = {};
+                localStorage.removeItem('resultcard-classes');
+                populateClassSelect();
+            }
+        }
+
+        function openSubjectsModal() {
+            const modal = document.getElementById('subjectsModal');
+            const modalSelect = document.getElementById('modal-class-select');
+
+            modalSelect.innerHTML = '<option value="">-- Select Class --</option>';
+            Object.keys(classesData).forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls;
+                option.textContent = cls;
+                modalSelect.appendChild(option);
+            });
+
+            const currentClass = document.getElementById('class-select').value;
+            if (currentClass && classesData[currentClass]) {
+                modalSelect.value = currentClass;
+            }
+
+            loadModalSubjects();
+            modal.style.display = 'flex';
+        }
+
+        function closeSubjectsModal() {
+            document.getElementById('subjectsModal').style.display = 'none';
+        }
+
+        function loadModalSubjects() {
+            const container = document.getElementById('modal-subjects-list');
+            const selectedCls = document.getElementById('modal-class-select').value;
+            container.innerHTML = '';
+
+            if (!selectedCls) return;
+
+            const subjects = classesData[selectedCls];
+
+            for (let i = 0; i < 11; i++) {
+                const sub = subjects[i] || { subject: '', mm: '' };
+                const subMmVal = (sub.mm !== undefined && sub.mm !== '') ? sub.mm : '';
+                const row = document.createElement('div');
+                row.style.display = 'flex';
+                row.style.gap = '10px';
+
+                row.innerHTML = `
+                    <input type="text" class="modal-sub-name" placeholder="Subject ${i + 1}" value="${sub.subject}" style="flex:2; padding:6px; border:1px solid #ccc; border-radius:4px; font-family:inherit;">
+                    <input type="number" class="modal-sub-mm" placeholder="M.M." value="${subMmVal}" style="flex:1; padding:6px; border:1px solid #ccc; border-radius:4px; font-family:inherit; text-align:center;">
+                `;
+                container.appendChild(row);
+            }
+        }
+
+        function saveSubjectsFromModal() {
+            const selectedCls = document.getElementById('modal-class-select').value;
+            if (!selectedCls) return alert('Please select a class first');
+
+            const container = document.getElementById('modal-subjects-list');
+            const rows = container.children;
+            const newSubjects = [];
+
+            for (let i = 0; i < rows.length; i++) {
+                const subName = rows[i].querySelector('.modal-sub-name').value.trim();
+                const subMmValue = rows[i].querySelector('.modal-sub-mm').value;
+                let subMm = '';
+                if (subName !== '') {
+                    subMm = subMmValue !== '' ? parseFloat(subMmValue) : 100;
+                }
+                newSubjects.push({ subject: subName, mm: subMm });
+            }
+
+            classesData[selectedCls] = newSubjects;
+            localStorage.setItem('resultcard-classes', JSON.stringify(classesData));
+
+            // Reload if currently selected
+            if (document.getElementById('class-select').value === selectedCls) {
+                loadClassSubjects();
+            } else if (!document.getElementById('class-select').value) {
+                document.getElementById('class-select').value = selectedCls;
+                loadClassSubjects();
+            }
+
+            closeSubjectsModal();
+            alert('Saved subjects and max marks for ' + selectedCls);
+        }
+
+        const photoInput = document.getElementById('photo-input');
+        const photoDisplay = document.getElementById('photo-display');
+
+        photoInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    photoDisplay.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:cover;">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        const logoInput = document.getElementById('logo-input');
+        const logoDisplay = document.getElementById('logo-display');
+
+        logoInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    logoDisplay.innerHTML = `<img src="${event.target.result}" style="width:100%; height:100%; object-fit:contain;">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        const inputs = document.querySelectorAll('input[type="number"]');
+
+        inputs.forEach(input => {
+            input.addEventListener('input', calculate);
+        });
+
+        // Also update QR code when name or roll no changes
+        document.querySelectorAll('.detail-input').forEach(input => {
+            input.addEventListener('input', updateQRCode);
+        });
+
+        function changeTheme() {
+            const theme = document.getElementById('theme-select').value;
+            document.body.className = theme;
+            localStorage.setItem('resultcard-theme', theme);
+        }
+
+        // Initialize Theme
+        const savedTheme = localStorage.getItem('resultcard-theme') || 'theme-blue';
+        document.getElementById('theme-select').value = savedTheme;
+        document.body.className = savedTheme;
+
+        let qrHandler = null;
+        function updateQRCode() {
+            const detailInputs = document.querySelectorAll('.detail-input');
+            const studentName = detailInputs[0].value || 'N/A';
+            const fatherName = detailInputs[1].value || 'N/A';
+            const dob = detailInputs[6].value || 'N/A';
+            const selectedClass = document.getElementById('class-select').value || 'N/A';
+
+            const totalMm = document.getElementById('total-gt-mm').innerText || '0';
+            const totalObt = document.getElementById('total-gt-obt').innerText || '0';
+            const percentage = document.getElementById('overall-percentage').innerText;
+            const result = document.getElementById('overall-result').innerText;
+
+            const collegeName = document.getElementById('school-name').innerText;
+            const qrData = `COLLEGE: ${collegeName}\nSTUDENT: ${studentName.toUpperCase()}\nFATHER: ${fatherName.toUpperCase()}\nDOB: ${dob}\nCLASS: ${selectedClass}\nTOTAL MARKS: ${totalMm}\nOBTAINED: ${totalObt}\nRESULT: ${result} (${percentage})`;
+
+            const qrcodeContainer = document.getElementById('qrcode');
+            qrcodeContainer.innerHTML = '';
+            qrHandler = new QRCode(qrcodeContainer, {
+                text: qrData,
+                width: 100,
+                height: 100,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function calculate() {
+            const rows = document.querySelectorAll('.subject-row');
+
+            let totalHyMm = 0, totalHyIst = 0, totalHyIind = 0, totalHyIiird = 0, totalHyTotal = 0;
+            let totalYMm = 0, totalYIst = 0, totalYIind = 0, totalYIiird = 0, totalYTotal = 0;
+            let totalGtMm = 0, totalGtObt = 0;
+
+            rows.forEach(row => {
+                const hyMm = parseFloat(row.querySelector('.hy-mm').value) || 0;
+                const hyIst = parseFloat(row.querySelector('.hy-ist').value) || 0;
+                const hyIind = parseFloat(row.querySelector('.hy-iind').value) || 0;
+                const hyIiird = parseFloat(row.querySelector('.hy-iiird').value) || 0;
+                const hyTotal = hyIst + hyIind + hyIiird;
+                row.querySelector('.hy-total').innerText = hyTotal || '';
+
+                const yMm = parseFloat(row.querySelector('.y-mm').value) || 0;
+                const yIst = parseFloat(row.querySelector('.y-ist').value) || 0;
+                const yIind = parseFloat(row.querySelector('.y-iind').value) || 0;
+                const yIiird = parseFloat(row.querySelector('.y-iiird').value) || 0;
+                const yTotal = yIst + yIind + yIiird;
+                row.querySelector('.y-total').innerText = yTotal || '';
+
+                const gtMm = hyMm + yMm;
+                const gtObt = hyTotal + yTotal;
+                row.querySelector('.gt-mm').innerText = gtMm || '';
+                row.querySelector('.gt-obt').innerText = gtObt || '';
+
+                // Accumulate totals
+                totalHyMm += hyMm;
+                totalHyIst += hyIst;
+                totalHyIind += hyIind;
+                totalHyIiird += hyIiird;
+                totalHyTotal += hyTotal;
+                totalYMm += yMm;
+                totalYIst += yIst;
+                totalYIind += yIind;
+                totalYIiird += yIiird;
+                totalYTotal += yTotal;
+                totalGtMm += gtMm;
+                totalGtObt += gtObt;
+            });
+
+            // Update footer totals
+            document.getElementById('total-hy-mm').innerText = totalHyMm || '';
+            document.getElementById('total-hy-ist').innerText = totalHyIst || '';
+            document.getElementById('total-hy-iind').innerText = totalHyIind || '';
+            document.getElementById('total-hy-iiird').innerText = totalHyIiird || '';
+            document.getElementById('total-hy-total').innerText = totalHyTotal || '';
+            document.getElementById('total-y-mm').innerText = totalYMm || '';
+            document.getElementById('total-y-ist').innerText = totalYIst || '';
+            document.getElementById('total-y-iind').innerText = totalYIind || '';
+            document.getElementById('total-y-iiird').innerText = totalYIiird || '';
+            document.getElementById('total-y-total').innerText = totalYTotal || '';
+            document.getElementById('total-gt-mm').innerText = totalGtMm || '';
+            document.getElementById('total-gt-obt').innerText = totalGtObt || '';
+
+            // Overall Summary
+            if (totalGtMm > 0) {
+                const percentage = (totalGtObt / totalGtMm) * 100;
+                document.getElementById('overall-percentage').innerText = percentage.toFixed(2) + ' %';
+
+                let grade = '';
+                if (percentage >= 90) grade = 'A+';
+                else if (percentage >= 80) grade = 'A';
+                else if (percentage >= 70) grade = 'B';
+                else if (percentage >= 60) grade = 'C';
+                else if (percentage >= 50) grade = 'D';
+                else if (percentage >= 33) grade = 'E';
+                else grade = 'Fail';
+
+                document.getElementById('overall-grade').innerText = grade;
+                document.getElementById('overall-result').innerText = percentage >= 33 ? 'PASSED' : 'FAILED';
+            } else {
+                document.getElementById('overall-percentage').innerText = '_______ %';
+                document.getElementById('overall-grade').innerText = '_______';
+                document.getElementById('overall-result').innerText = '___________';
+            }
+            updateQRCode();
+        }
+
+        // --- Security Restrictions ---
+        // Disable Right-Click
+        window.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Disable Shortcuts: Ctrl+S, Ctrl+U, F12
+        window.addEventListener('keydown', e => {
+            // Block Ctrl+S (Save), Ctrl+U (View Source)
+            if (e.ctrlKey && (e.key === 's' || e.key === 'u')) {
+                e.preventDefault();
+                return false;
+            }
+            // Block F12 (DevTools)
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // --- School Settings & Auto-Fit Logic ---
+        function autoFitSchoolName() {
+            const el = document.getElementById('school-name');
+            const container = el.parentElement;
+            if (!el || !container) return;
+
+            let fontSize = 28; // Original max size
+            el.style.fontSize = fontSize + 'px';
+
+            // Shrink font size until it fits in a single line
+            while (el.scrollWidth > (container.offsetWidth - 20) && fontSize > 12) {
+                fontSize -= 1;
+                el.style.fontSize = fontSize + 'px';
+            }
+        }
+
+        function saveSchoolSettings() {
+            const name = document.getElementById('input-school-name').value.trim();
+            const address = document.getElementById('input-school-address').value.trim();
+            const session = document.getElementById('input-school-session').value.trim();
+            const pass = document.getElementById('input-settings-password').value.trim();
+
+            if (!name) return alert('School name cannot be empty');
+            if (!pass) return alert('Password cannot be empty');
+
+            localStorage.setItem('resultcard-school-name', name);
+            localStorage.setItem('resultcard-school-address', address);
+            localStorage.setItem('resultcard-school-session', session);
+            localStorage.setItem('resultcard-settings-pass', pass);
+
+            loadSchoolSettings();
+            closeSchoolSettings();
+        }
+
+        function loadSchoolSettings() {
+            const name = localStorage.getItem('resultcard-school-name') || "MALTI DEVI ADARSH INTER COLLEGE";
+            const address = localStorage.getItem('resultcard-school-address') || "ALAMPUR BHAISIYAPUR MALIKPUR KANNAUJ";
+            const session = localStorage.getItem('resultcard-school-session') || "ANNUAL PROGRESS REPORT - 2025-26";
+            const pass = localStorage.getItem('resultcard-settings-pass') || "Manoj@9598633781";
+
+            const nameEl = document.getElementById('school-name');
+            const addressEl = document.getElementById('school-address');
+            const sessionEl = document.getElementById('school-session');
+
+            if (nameEl) nameEl.innerText = name;
+            if (addressEl) addressEl.innerText = address;
+            if (sessionEl) sessionEl.innerText = session;
+
+            // Sync password to input
+            const passInput = document.getElementById('input-settings-password');
+            if (passInput) passInput.value = pass;
+
+            autoFitSchoolName();
+            if (typeof updateQRCode === 'function') updateQRCode();
+        }
+
+        function openSchoolSettings() {
+            const savedPass = localStorage.getItem('resultcard-settings-pass') || "Manoj@9598633781";
+            const enteredPass = prompt("Enter Password to open School Settings:");
+
+            if (enteredPass === null) return; // User cancelled
+            if (enteredPass !== savedPass) {
+                alert("Incorrect Password!");
+                return;
+            }
+
+            document.getElementById('input-school-name').value = document.getElementById('school-name').innerText;
+            document.getElementById('input-school-address').value = document.getElementById('school-address').innerText;
+            document.getElementById('input-school-session').value = document.getElementById('school-session').innerText;
+            document.getElementById('input-settings-password').value = savedPass;
+            document.getElementById('schoolSettingsModal').style.display = 'flex';
+        }
+
+        function closeSchoolSettings() {
+            document.getElementById('schoolSettingsModal').style.display = 'none';
+        }
+
+        // Initialize on load and resize
+        window.addEventListener('load', loadSchoolSettings);
+        window.addEventListener('resize', autoFitSchoolName);
+
+
+    </script>
+</body>
+
+</html>
